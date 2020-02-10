@@ -7,4 +7,4 @@ yfinance==0.1.54
 dash==1.8.0
 dash-table==4.6.0
 chart-studio==1.0.0
-
+gunicorn==20.0.04
