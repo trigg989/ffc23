@@ -22,7 +22,7 @@ def get_data():
     spf_df = dl.get_spf()
     inv_ind = dl.get_inv_ind(yield_inds,sd)
     gld_df = pdr.DataReader(gold_data, 'fred', start=sd)
-    bbg_df = pd.read_excel('../Data/recession hindsight.xlsx', sheet_name='Evan', index_col=0)
+    bbg_df = pd.read_excel('https://github.com/trigg989/ffc23/raw/master/Data/recession%20hindsight.xlsx', sheet_name='Evan', index_col=0)
 
     df = fred_ind.join(spf_df)
     df = df.join(spx_pr)

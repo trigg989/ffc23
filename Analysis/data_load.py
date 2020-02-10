@@ -21,12 +21,9 @@ def get_spf():
     dates = hist.groupby(['year', 'quarter']).agg({'date':'max'}).reset_index()
     
     #Get spf data and merge in trading dates
-    url = "https://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/median_recess_level.xlsx?la=en"
-    r = requests.get(url,verify=False)
-    with open("../Data/spfdata.xlsx", "wb") as code:
-        code.write(r.content)
+
         
-    spf_df = pd.read_excel('../Data/spfdata.xlsx')
+    spf_df = pd.read_excel('https://www.philadelphiafed.org/-/media/research-and-data/real-time-center/survey-of-professional-forecasters/data-files/files/median_recess_level.xlsx?la=en')
     spf_df.columns = [col.lower() for col in spf_df.columns.to_list()]
     spf_df = spf_df.merge(dates, left_on = ['year', 'quarter'], right_on = ['year', 'quarter'])
     
