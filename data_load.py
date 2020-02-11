@@ -32,7 +32,7 @@ def get_spf():
     
     return spf_df
 
-def get_oecd(inds,sd):
+def get_fred_inds(inds,sd):
     
     #Trading dates
     

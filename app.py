@@ -96,7 +96,11 @@ app.layout = html.Div(
                              {'label': 'SPF +1 Qtr', 'value': 'recess2'},
                              {'label': 'SPF +2 Qtr', 'value': 'recess3'},
                              {'label': 'SPF +3 Qtr', 'value': 'recess4'},
-                             {'label': 'SPF +4 Qtr', 'value': 'recess5'}],
+                             {'label': 'SPF +4 Qtr', 'value': 'recess5'},
+                             {'label' : 'NBER', 'value' : 'USRECM'},
+                             {'label' : '2/10 Inversion', 'value' : '10Y2Y'},
+                             {'label' : 'OECD US GDP FCST', 'value' : 'OECD_US_GDP'},
+                             {'label' : 'OECD GBP GDP FCST', 'value' : 'OECD_GBP_GDP'}],
                     value='recess1',
                     placeholder='SPF Current Qtr',
                     ),
@@ -289,6 +293,7 @@ app.layout = html.Div(
 
 def calc_returns(stock, stock_perc, bond, bond_perc, forecast, threshold):
     
+    neg_inds = ['JHDUSRGDPBR', 'OECD_US_GDP', 'OECD_GBP_GDP']
     
     stock_perc = stock_perc/100
     bond_perc = bond_perc/100
@@ -297,7 +302,11 @@ def calc_returns(stock, stock_perc, bond, bond_perc, forecast, threshold):
     df['bond returns'] = (df[bond] - df[bond].shift()) / df[bond].shift()
     
     df['allocated_non_recess_return'] = (df['stock returns'] * stock_perc) + (df['bond returns'] * bond_perc)
-    df['recession_ind'] = np.where(df[forecast] >= threshold, 1, 0)
+    if forecast in neg_inds:
+        df['recession_ind'] = np.where(df[forecast] < threshold, 1, 0)
+    else:
+        df['recession_ind'] = np.where(df[forecast] >= threshold, 1, 0)
+        
     df['recession_return'] = np.where(df['recession_ind'] == 1, (df['stock returns'] * bond_perc) + (df['bond returns'] * stock_perc), (df['stock returns'] * stock_perc) + (df['bond returns'] * bond_perc))
 
     df2 = df[['date', 'stock returns', 'bond returns', 'allocated_non_recess_return', 'recession_ind', 'recession_return']]
