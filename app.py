@@ -98,9 +98,9 @@ app.layout = html.Div(
                              {'label': 'SPF +3 Qtr', 'value': 'recess4'},
                              {'label': 'SPF +4 Qtr', 'value': 'recess5'},
                              {'label' : 'NBER', 'value' : 'USRECM'},
-                             {'label' : '2/10 Inversion', 'value' : '10Y2Y'},
-                             {'label' : 'OECD US GDP FCST', 'value' : 'OECD_US_GDP'},
-                             {'label' : 'OECD GBP GDP FCST', 'value' : 'OECD_GBP_GDP'}],
+                             {'label' : '2/10 Inversion', 'value' : 'T10Y2Y'},
+                             {'label' : 'OECD US GDP FCST', 'value' : 'oecd_us_gdp'},
+                             {'label' : 'OECD GBP GDP FCST', 'value' : 'oecd_gbp_gdp'}],
                     value='recess1',
                     placeholder='SPF Current Qtr',
                     ),
@@ -293,7 +293,7 @@ app.layout = html.Div(
 
 def calc_returns(stock, stock_perc, bond, bond_perc, forecast, threshold):
     
-    neg_inds = ['JHDUSRGDPBR', 'OECD_US_GDP', 'OECD_GBP_GDP']
+    neg_inds = ['oecd_us_gdp', 'oecd_gbp_gdp', 'T10Y2Y']
     
     stock_perc = stock_perc/100
     bond_perc = bond_perc/100

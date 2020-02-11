@@ -83,61 +83,29 @@ def get_inv_ind(yield_inds,sd):
     
     return inv_ind
 
-def get_rates(tickers):
+def get_gdp_fcst():
     
-    #Get interest rates from FRED
+    #Trading dates
     
-    df = pdr.DataReader(tickers, 'fred', start='01-01-1900')
-    return df
-
-def get_sentiment():
-    
-    #Get consumer sentiment index
-    
-    tickers = ['UMCSENT']
-    df = pdr.DataReader(tickers, 'fred', start='01-01-1960')
-    return df
-
-def get_consumer_leading_ind():
-    
-    #Get consumer confidence index
-    
-    ticker = 'CLIUS'
-    df = pdr.DataReader('ticker=' + ticker, 'econdb', start='01-01-1960')
-    df.columns = df.columns.map(''.join)
-    df.columns = ['CLI']
-    return df
-
-def get_unemployment():
-    
-    #Get unemployment data
-    ticker = ['UNRATE']
-    df = pdr.DataReader(ticker, 'fred', start='01-01-1960')
-    
-def get_bond_fund():
-    ticker = ['BAMLCC0A0CMTRIV']
-    df = pdr.DataReader(ticker, 'fred', start='01-01-1960')
-    return df
-
-
-def get_sp500():
-    
-    #Grab S&P 500 data from yahoo finance
     spx = yf.Ticker('^GSPC')
-    df = spx.history(period='max')
-    df = df['Close']
-    return df
+    hist = spx.history(period='max')
+    hist['date'] = hist.index
+    hist['month'] = hist['date'].dt.month
+    hist['year'] = hist['date'].dt.year
+    dates = hist.groupby(['year', 'month']).agg({'date':'max'}).reset_index()
     
+    #Get spf data and merge in trading dates
 
-def get_equity_fund():
+        
+    gdp_df = pd.read_excel('https://github.com/trigg989/ffc23/raw/master/Data/oecd_gdp_growth.xlsx')
+    gdp_df.columns = [col.lower() for col in gdp_df.columns.to_list()]
+    gdp_df.set_index('date', inplace=True)
+    gdp_df['month'] = gdp_df.index.month
+    gdp_df['year'] = gdp_df.index.year
+    gdp_df = gdp_df.merge(dates, left_on = ['year', 'month'], right_on = ['year', 'month'])
+    gdp_df.dropna(inplace=True)
     
-    #Get equity fund data
-    fund = yf.Ticker('VFINX')
-    df = fund.history(period='max')
-    df = df[['Close', 'Dividends']]
-    return df
-
+    gdp_df.set_index(gdp_df['date'], inplace=True)
+    gdp_df = gdp_df[['oecd_us_gdp', 'oecd_gbp_gdp']]
     
-     
-
-
+    return gdp_df
