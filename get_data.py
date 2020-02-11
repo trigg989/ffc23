@@ -16,7 +16,7 @@ bbg_data = ['LBUSTRUU']
 
 def get_data():
     #spx_dy = quandl.get('MULTPL/SP500_DIV_YIELD_MONTH', start_date=sd, end_date=ed)
-    spx_pr = pd.DataFrame(pdr.DataReader('BA', 'yahoo', start=sd)['Adj Close'])
+    spx_pr = pd.DataFrame(pdr.DataReader('^GSPC', 'yahoo', start=sd)['Adj Close'])
     fred_ind = dl.get_fred_inds(fred_recess_inds, sd)
     #ice_tr = pdr.DataReader(ice_data, 'fred', start=sd)
     spf_df = dl.get_spf()
