@@ -1,5 +1,5 @@
 pandas==0.25.1
-requests==2.22.0
+requests==2.31.0
 numpy==1.16.5
 pandas-datareader==0.8.1
 Quandl==3.5.0
